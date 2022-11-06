@@ -1,32 +1,38 @@
-import * as https from 'https';
-import * as http from 'http';
-import { promises as fs, existsSync } from 'fs';
-import { Page } from './lib/Page.js';
+import express from "express";
+import * as http from "http";
+import * as https from "https";
+import { promises as fs } from "fs";
 import "./projectDirname.js";
 import "./config.js";
-import * as path from 'path';
-const requestListener = async (req, res) => {
-    if (req.url === "/")
-        req.url = "/index";
-    if (!existsSync(path.join(projectDirname, "pages", req.url))) {
-        res.writeHead(404);
-        res.end();
-        return;
-    }
-    let page = await (new Page(req.url)).init();
-    res.setHeader("Content-Type", "text/html");
-    res.writeHead(200);
-    res.end(page.html);
-};
-const options = {
+import * as path from "path";
+const app = express();
+const credentials = {
     key: await fs.readFile(path.join(projectDirname, "ssl", "key.pem")),
-    cert: await fs.readFile(path.join(projectDirname, "ssl", "cert.pem"))
+    cert: await fs.readFile(path.join(projectDirname, "ssl", "cert.pem")),
 };
-const server = https.createServer(options, requestListener);
-server.listen(config.port, config.domain, () => {
-    console.log(`Server is running on https://${config.domain}:${config.port}`);
+app.set("view engine", "pug");
+const pageFiles = await fs.readdir(path.join(projectDirname, "dist", "pages"));
+for (const pageFile of pageFiles) {
+    const p = (await import(path.join(projectDirname, "dist", "pages", pageFile))).default;
+    console.debug(`Importing page ${p.url}`);
+    let handlers = [];
+    if (p.path.endsWith(".pug")) {
+        handlers.push(async (req, res) => {
+            res.render(path.join(projectDirname, "public", p.path), await p.getArgs(req));
+        });
+    }
+    if (p.path.endsWith(".html")) {
+        handlers.push(async (req, res) => {
+            res.sendFile(path.join(projectDirname, "public", p.path));
+        });
+    }
+    app.get(p.url, ...handlers);
+}
+app.get(/^((?!\.).)*$/g, (req, res) => {
+    res.sendFile(path.join(projectDirname, "public", "html", "404.html"));
 });
-http.createServer((req, res) => {
-    res.writeHead(301, { "Location": `https://${config.domain}:${config.port}${req.url}` });
-    res.end();
-}).listen(8080, config.domain);
+app.use(express.static(path.join(projectDirname, "public")));
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+httpServer.listen(8080);
+httpsServer.listen(8443);

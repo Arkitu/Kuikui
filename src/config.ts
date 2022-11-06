@@ -9,4 +9,4 @@ export interface Config {
 
 global.config = JSON.parse(
   (await fs.readFile(path.join(projectDirname, "config.json"))).toString()
-); //as unknown as Config;
+);

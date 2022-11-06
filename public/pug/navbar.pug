@@ -1,0 +1,24 @@
+style
+  include ../css/main.css
+  include ../css/navbar.css
+include profile_pic.pug
+
+mixin navbar(profile_pic_link)
+  nav.navbar
+    .anchor_left
+      a.logo
+        img(src="../img/logo_white_250px.svg", alt="kuikui's logo")
+        h1 Kuikui
+
+      ul.buttons
+        li
+          a(href="#") Home
+        li
+          a(href="#") About
+        li
+          a(href="#") Contact
+        li
+          a(href="#") Login
+
+    .anchor_right
+      +profile_pic(profile_pic_link)

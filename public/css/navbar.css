@@ -1,0 +1,47 @@
+.navbar {
+  padding: 0 1rem 0.5rem;
+  background-color: #6F59AC;
+  display: flex;
+}
+
+.navbar .anchor_left {
+  float: left;
+}
+
+.navbar .anchor_right {
+  float: right;
+  margin: 0 0 0 auto;
+}
+
+.navbar .logo {
+  display: flex;
+}
+
+.navbar .logo img {
+  width: 3rem;
+  height: 3rem;
+}
+
+.navbar .logo h1 {
+  color: #fff;
+  font-variant: bold;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+  margin: auto 1rem;
+}
+
+.navbar .buttons li {
+  display: inline-block;
+  margin: 0 1rem;
+}
+
+.navbar .buttons li a {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/*# sourceMappingURL=navbar.css.map */

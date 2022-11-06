@@ -14,7 +14,8 @@
     "noEmitOnError": false,
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

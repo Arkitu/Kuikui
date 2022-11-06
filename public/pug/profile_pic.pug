@@ -1,0 +1,9 @@
+style
+  include ../css/profile_pic.css
+
+mixin profile_pic(profile_pic_link)
+  a.profile_pic
+    if profile_pic_link
+      img(src=profile_pic_link, alt="profile picture")
+    else
+      img(src="../img/default_profile_pic_250px.svg", alt="profile picture")
