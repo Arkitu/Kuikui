@@ -53,6 +53,8 @@ for (const pageFile of pageFiles) {
 
 // Match all requests except those with points in the path
 app.get(/^((?!\.).)*$/g, (req, res) => {
+  // Log 404 in red
+  log(`\x1b[31m404\x1b[0m : Rendering page ${req.path}`);
   res.sendFile(path.join(projectDirname, "public", "html", "404.html"));
 });
 
