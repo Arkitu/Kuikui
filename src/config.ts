@@ -4,7 +4,8 @@ import * as path from "path";
 
 export interface Config {
   domain: string;
-  port: number;
+  httpsPort: number;
+  httpPort: number;
 }
 
 global.config = JSON.parse(
